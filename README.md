@@ -1,1 +1,1 @@
-# self-learn-fastapi
+# fastapi-boilerplate
