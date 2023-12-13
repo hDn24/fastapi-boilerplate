@@ -11,8 +11,12 @@ SQLALCHEMY_DATABASE_URL = (
     f"{CFG.db_name}?client_encoding=utf8"
 )
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL, pool_pre_ping=True, echo=CFG.sqlalchemy_echo)
-SessionLocal = scoped_session(sessionmaker(bind=engine, autocommit=False, autoflush=False))
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL, pool_pre_ping=True, echo=CFG.sqlalchemy_echo
+)
+SessionLocal = scoped_session(
+    sessionmaker(bind=engine, autocommit=False, autoflush=False)
+)
 
 
 # Dependency
