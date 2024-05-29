@@ -3,12 +3,11 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    db_host: str = Field(default="0.0.0.0")
-    db_port: int = Field(default=5432)
-    db_name: str = Field(default="db")
-    db_user: str = Field(default="postgres")
-    db_pass: str = Field(default="postgres")
-    sqlalchemy_echo: bool = Field(default=False)
+    DB_HOST: str = Field(default="0.0.0.0")
+    DB_PORT: int = Field(default=5432)
+    DB_NAME: str = Field(default="db")
+    DB_USER: str = Field(default="postgres")
+    DB_PASS: str = Field(default="postgres")
 
     class Config:
         env_file = ".env"
