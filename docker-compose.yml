@@ -1,0 +1,30 @@
+services:
+  app:
+    image: app:latest
+    build: 
+      context: .
+      args:
+        INSTALL_DEV: ${INSTALL_DEV-false}
+    volumes:
+      - ./app/:/code/app/
+    env_file:
+      - .env
+    ports:
+      - 8000:8000
+    platform: linux/amd64
+
+  db:
+    image: postgres:15
+    restart: always
+    volumes:
+      - app-db-data:/var/lib/postgresql/data/pgdata
+    env_file:
+      - .env
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
+      - POSTGRES_PASSWORD=${DB_PASS?Variable not set}
+      - POSTGRES_USER=${DB_USER?Variable not set}
+      - POSTGRES_DB=${DB_NAME?Variable not set}
+
+volumes:
+  app-db-data:
