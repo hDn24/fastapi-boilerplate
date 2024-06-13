@@ -12,6 +12,13 @@ uvicorn = "^0.24.0.post1"
 sqlalchemy = "^2.0.23"
 pydantic-settings = "2.2.1"
 
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.1.11"
+
+[tool.ruff]
+line-length = 120
+extend-exclude = ["*.ipynb"]
+
 
 [build-system]
 requires = ["poetry-core"]
