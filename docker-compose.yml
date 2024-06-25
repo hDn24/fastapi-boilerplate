@@ -25,6 +25,8 @@ services:
       - POSTGRES_PASSWORD=${DB_PASS?Variable not set}
       - POSTGRES_USER=${DB_USER?Variable not set}
       - POSTGRES_DB=${DB_NAME?Variable not set}
+    ports:
+      - 5432:5432
 
 volumes:
   app-db-data:
