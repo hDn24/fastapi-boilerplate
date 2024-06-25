@@ -1,5 +1,8 @@
 # Local development
-.PHONY: app lint
+.PHONY: data app lint
+db:
+	docker compose up -d --build --force-recreate db
+
 app:
 	docker compose up -d --build --force-recreate app
 	docker compose logs -f app
