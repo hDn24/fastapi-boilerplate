@@ -1,6 +1,7 @@
 # Local development
 .PHONY: api db app lint
 api:
+	poetry run python app/init_data.py
 	poetry run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 db:

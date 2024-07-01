@@ -14,11 +14,10 @@ def init_data():
     reset_database()
 
     user_create = UseCreate(
-        username="hdn",
+        username="hDn24",
         email="hDn24@gmail.com",
         password="password",
         is_superuser=True,
-        is_active=True,
     )
 
     crud.create_user(session, user_create)
