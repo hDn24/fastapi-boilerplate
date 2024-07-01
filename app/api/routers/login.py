@@ -13,15 +13,15 @@ from app.configs import settings
 from app.database import get_db
 from app.dependencies import CurrentUser
 
-router = APIRouter()
+router = APIRouter(prefix="/login", tags=["login"])
 
 
-@router.post("/login/access-token")
+@router.post("access-token")
 def create_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
-    session: Session = Depends(get_db),
+    db: Session = Depends(get_db),
 ) -> Token:
-    user = crud.authenticate(session, form_data.username, form_data.password)
+    user = crud.authenticate(db, form_data.username, form_data.password)
 
     if not user:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Incorrect email or password")
@@ -32,7 +32,7 @@ def create_access_token(
     return Token(access_token=security.create_access_token(user.id, expires_delta=access_token_expires))
 
 
-@router.post("/login/test-token", response_model=UserOut)
+@router.post("test-token", response_model=UserOut)
 def test_token(current_user: CurrentUser) -> Any:
     """
     Test access token

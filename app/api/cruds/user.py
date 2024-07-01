@@ -6,7 +6,7 @@ from app.api.schemas.user import UseCreate
 from app.api.utils.security import get_password_hash
 
 
-def create_user(db: Session, user_create: UseCreate):
+def create_user(db: Session, user_create: UseCreate) -> User:
     user_dict = user_create.dict()
     user_dict["hash_password"] = get_password_hash(user_create.password)
     user_hashed = schemas.User(**user_dict)

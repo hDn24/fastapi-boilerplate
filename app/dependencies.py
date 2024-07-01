@@ -17,7 +17,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/login/acce
 
 def get_current_user(
     token: Annotated[str, Depends(oauth2_scheme)],
-    session: Session = Depends(get_db),
+    db: Session = Depends(get_db),
 ):
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[security.ALGORITHM])
@@ -25,7 +25,7 @@ def get_current_user(
     except (JWTError, ValidationError):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Could not validate credentials")
 
-    user = session.query(User).filter(User.id == token_data.sub).first()
+    user = db.query(User).filter(User.id == token_data.sub).first()
 
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")

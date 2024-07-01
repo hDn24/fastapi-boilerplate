@@ -7,8 +7,8 @@ from app.configs import settings
 app = FastAPI(title="fastapi-boilerplate", openapi_url=f"{settings.API_V1_STR}/openapi.json")
 
 
-app.include_router(login_router, prefix=settings.API_V1_STR, tags=["login"])
-app.include_router(user_router, prefix=settings.API_V1_STR, tags=["users"])
+app.include_router(login_router, prefix=settings.API_V1_STR)
+app.include_router(user_router, prefix=settings.API_V1_STR)
 
 if __name__ == "__main__":
     import uvicorn

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, status
 
-router = APIRouter(prefix="/users")
+router = APIRouter(prefix="/users", tags=["users"])
 
 
 @router.get("/")
