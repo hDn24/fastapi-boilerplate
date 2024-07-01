@@ -1,5 +1,8 @@
 # Local development
-.PHONY: data app lint
+.PHONY: api db app lint
+api:
+	poetry run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+
 db:
 	docker compose up -d --build --force-recreate db
 
