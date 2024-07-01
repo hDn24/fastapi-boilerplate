@@ -14,9 +14,9 @@ def init_data():
     reset_database()
 
     user_create = UseCreate(
-        username="hDn24",
+        username="hdn",
         email="hDn24@gmail.com",
-        password="2ES69y0EFiPynrhAelkcmBTgOGTTirDBJ4G0R-y9qcQ",
+        password="password",
         is_superuser=True,
         is_active=True,
     )
@@ -27,8 +27,6 @@ def init_data():
 def reset_database():
     Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
-
-    print("DONE")
 
 
 init_data()
