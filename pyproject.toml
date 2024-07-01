@@ -2,7 +2,7 @@
 name = "fastapi-boilerplate"
 version = "0.1.0"
 description = ""
-authors = ["Hồ Đăng Nhân <51161577+hDn24@users.noreply.github.com>"]
+authors = ["hDn24"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
@@ -11,8 +11,9 @@ fastapi = "^0.109.1"
 python-multipart = "^0.0.7"
 uvicorn = {extras = ["standard"], version = "^0.18.3"}
 sqlalchemy = {extras = ["asyncio"], version = "^2.0.31"}
-psycopg = {extras = ["binary"], version = "^3.1.13"}
+psycopg = {extras = ["binary"], version = "3.1.19"}
 pydantic-settings = "2.2.1"
+pydantic = ">2.0"
 
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
