@@ -4,19 +4,15 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session, scoped_session, sessionmaker
 
-from .configs import CFG
+from .configs import settings
 
 SQLALCHEMY_DATABASE_URL = (
-    f"postgresql+psycopg2://{CFG.db_user}:{CFG.db_psw}@{CFG.db_ip}:{CFG.db_port}/"
-    f"{CFG.db_name}?client_encoding=utf8"
+    f"postgresql://{settings.DB_USER}:{settings.DB_PASS}@{settings.DB_HOST}:{settings.DB_PORT}/{settings.DB_NAME}"
 )
 
-engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, pool_pre_ping=True, echo=CFG.sqlalchemy_echo
-)
-SessionLocal = scoped_session(
-    sessionmaker(bind=engine, autocommit=False, autoflush=False)
-)
+
+engine = create_engine(str(settings.SQLALCHEMY_DATABASE_URI))
+SessionLocal = scoped_session(sessionmaker(bind=engine, autocommit=False, autoflush=False))
 
 
 # Dependency

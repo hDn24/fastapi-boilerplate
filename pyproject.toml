@@ -7,7 +7,23 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-fastapi = "^0.105.0"
+fastapi = "^0.109.1"
+python-multipart = "^0.0.7"
+uvicorn = {extras = ["standard"], version = "^0.18.3"}
+sqlalchemy = {extras = ["asyncio"], version = "^2.0.31"}
+psycopg = {extras = ["binary"], version = "^3.1.13"}
+pydantic-settings = "2.2.1"
+
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+bcrypt = "4.0.1"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.1.11"
+
+[tool.ruff]
+line-length = 120
+extend-exclude = ["*.ipynb"]
 
 
 [build-system]
