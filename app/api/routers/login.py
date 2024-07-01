@@ -16,7 +16,7 @@ from app.dependencies import CurrentUser
 router = APIRouter(prefix="/login", tags=["login"])
 
 
-@router.post("access-token")
+@router.post("/access-token")
 def create_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     db: Session = Depends(get_db),
@@ -32,7 +32,7 @@ def create_access_token(
     return Token(access_token=security.create_access_token(user.id, expires_delta=access_token_expires))
 
 
-@router.post("test-token", response_model=UserOut)
+@router.post("/test-token", response_model=UserOut)
 def test_token(current_user: CurrentUser) -> Any:
     """
     Test access token
