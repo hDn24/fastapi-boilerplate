@@ -1,3 +1,5 @@
+from typing import List
+
 from sqlalchemy.orm import Session
 
 from app.api.models.user import User
@@ -24,3 +26,18 @@ def create_user(db: Session, user_data: UseCreate) -> User:
     db.commit()
     db.refresh(user)
     return user
+
+
+def get_users(skip: int, limit: int, db: Session) -> List[User]:
+    """
+    Retrieves a list of users from the database.
+
+    Args:
+        skip: The number of users to skip.
+        limit: The maximum number of users to retrieve.
+        db: The database session.
+
+    Returns:
+        A list of user objects.
+    """
+    return db.query(User).offset(skip).limit(limit).all()
