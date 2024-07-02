@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field
 
 class UserBase(BaseModel):
     username: str = Field(example="hDn24")
-    email: str = Field(example="hDn24@gmail")
+    email: str = Field(example="hDn24@gmail.com")
     is_active: bool = Field(default=True)
     is_superuser: bool = Field(default=False)
 
