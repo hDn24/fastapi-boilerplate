@@ -28,7 +28,7 @@ def create_user(db: Session, user_data: UseCreate) -> User:
     return user
 
 
-def get_users(skip: int, limit: int, db: Session) -> List[User]:
+def get_users(db: Session, skip: int, limit: int) -> List[User]:
     """
     Retrieves a list of users from the database.
 
@@ -41,3 +41,17 @@ def get_users(skip: int, limit: int, db: Session) -> List[User]:
         A list of user objects.
     """
     return db.query(User).offset(skip).limit(limit).all()
+
+
+def get_user_by_id(db: Session, id: int) -> User | None:
+    """
+    Retrieves a user from the database by their ID.
+
+    Args:
+        db: The database session.
+        id: The ID of the user.
+
+    Returns:
+        The user object if found, otherwise None.
+    """
+    return db.query(User).filter(User.id == id).first()
