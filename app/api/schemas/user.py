@@ -8,7 +8,7 @@ class UserBase(BaseModel):
     is_superuser: bool = Field(default=False)
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class UseCreate(UserBase):
@@ -19,7 +19,7 @@ class User(UserBase):
     hash_password: str = Field(examples="...")
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class UserOut(UserBase):

@@ -12,4 +12,4 @@ app:
 	docker compose logs -f app
 
 lint:
-	poetry run python -m ruff check
+	poetry run python -m ruff format app

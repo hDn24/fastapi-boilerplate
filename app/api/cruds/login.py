@@ -1,5 +1,3 @@
-from typing import List
-
 from sqlalchemy.orm import Session
 
 from app.api.models.user import User
@@ -7,14 +5,34 @@ from app.api.utils.security import verify_password
 
 
 def get_user_by_email(db: Session, email: str) -> User | None:
+    """
+    Retrieves a user from the database based on their email.
+
+    Args:
+        db: The database session.
+        email: The email of the user.
+
+    Returns:
+        The user object if found, otherwise None.
+    """
     return db.query(User).filter(User.email == email).first()
 
 
 def authenticate(db: Session, email: str, password: str) -> User | None:
-    db_user = get_user_by_email(db, email)
+    """
+    Authenticates a user based on their email and password.
 
-    if not db_user:
-        return None
-    if not verify_password(password, db_user.hash_password):
-        return None
-    return db_user
+    Args:
+        db: The database session.
+        email: The email of the user.
+        password: The user's password.
+
+    Returns:
+        The authenticated user object if successful, otherwise None.
+    """
+    user = get_user_by_email(db, email)
+
+    if user and verify_password(password, user.hash_password):
+        return user
+
+    return None
