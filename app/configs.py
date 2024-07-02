@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_ignore_empty=True, extra="ignore")
 
     ENVIRONMENT: str = Field(default="local")
+    PROJECT_NAME: str = Field(default="fastapi-boilerplate")
 
     DB_HOST: str = Field(default="0.0.0.0")
     DB_PORT: int = Field(default=5432)
