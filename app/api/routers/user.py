@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.api.cruds import user as crud
 from app.api.models.user import User
-from app.api.schemas.user import UserOut
+from app.api.schemas.user import UseCreate, UserOut
 from app.database import get_db
 from app.dependencies import CurrentUser, get_current_active_superuser
 
@@ -32,6 +32,26 @@ def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)) -
     if not users:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Users not found")
     return users
+
+
+@router.post("/", dependencies=[Depends(get_current_active_superuser)], response_model=UserOut)
+def create_user(user_data: UseCreate, db: Session = Depends(get_db)) -> User:
+    """
+    Create a new user.
+
+    Args:
+        user_data: The data of the user to be created.
+        db: The database session. Defaults to the session obtained from the `get_db` dependency.
+
+    Returns:
+        User
+    """
+    user = crud.get_user_by_email(db, email=user_data.email)
+
+    if user:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
+
+    return crud.create_user(db, user_data)
 
 
 @router.get("/{user_id}", response_model=UserOut | None)
@@ -65,12 +85,7 @@ def read_user_by_id(user_id: int, current_user: CurrentUser, db: Session = Depen
     return user
 
 
-@router.post("/")
-def create_user():
-    raise HTTPException(status_code=status.HTTP_501_NOT_IMPLEMENTED, detail="Not implemented yet")
-
-
-@router.put("/{id}")
+@router.patch("/{user_id}")
 def update_user():
     raise HTTPException(status_code=status.HTTP_501_NOT_IMPLEMENTED, detail="Not implemented yet")
 
