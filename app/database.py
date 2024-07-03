@@ -4,23 +4,24 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session, scoped_session, sessionmaker
 
-from .configs import CFG
+from .configs import settings
 
-SQLALCHEMY_DATABASE_URL = (
-    f"postgresql+psycopg2://{CFG.db_user}:{CFG.db_psw}@{CFG.db_ip}:{CFG.db_port}/"
-    f"{CFG.db_name}?client_encoding=utf8"
-)
+SQLALCHEMY_DATABASE_URL = f"postgresql+psycopg://{settings.DB_USER}:{settings.DB_PASS}@{settings.DB_HOST}:{settings.DB_PORT}/{settings.DB_NAME}"
 
-engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, pool_pre_ping=True, echo=CFG.sqlalchemy_echo
-)
-SessionLocal = scoped_session(
-    sessionmaker(bind=engine, autocommit=False, autoflush=False)
-)
+
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
+SessionLocal = scoped_session(sessionmaker(bind=engine, autocommit=False, autoflush=False))
 
 
 # Dependency
 def get_db() -> Iterator[Session]:
+    """
+    Get a database session for executing database operations.
+
+    Returns:
+        Iterator[Session]: A context manager that provides a database session.
+            The session is automatically closed when the context is exited.
+    """
     db = SessionLocal()
     try:
         yield db
