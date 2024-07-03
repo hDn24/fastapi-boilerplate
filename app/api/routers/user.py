@@ -1,11 +1,13 @@
 from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from pydantic import ValidationError
 from sqlalchemy.orm import Session
 
 from app.api.cruds import user as crud
 from app.api.models.user import User
-from app.api.schemas.user import UseCreate, UserOut
+from app.api.schemas.user import UseCreate, UserOut, UserUpdate
+from app.api.utils.security import get_password_hash
 from app.database import get_db
 from app.dependencies import CurrentUser, get_current_active_superuser
 
@@ -85,9 +87,26 @@ def read_user_by_id(user_id: int, current_user: CurrentUser, db: Session = Depen
     return user
 
 
-@router.patch("/{user_id}")
-def update_user():
-    raise HTTPException(status_code=status.HTTP_501_NOT_IMPLEMENTED, detail="Not implemented yet")
+@router.patch("/{user_id}", dependencies=[Depends(get_current_active_superuser)], response_model=UserOut)
+def update_user(user_id: int, user_data: UserUpdate, db: Session = Depends(get_db)):
+    user = crud.get_user_by_id(db, user_id)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+
+    if user_data.email:
+        existing_user = crud.get_user_by_email(db, email=user_data.email)
+
+        if existing_user and existing_user.id != user_id:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
+
+    try:
+        crud.update_user(db, user, user_data, get_password_hash(user_data.password))
+    except ValidationError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=e.errors())
+    except Exception:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Update fail")
+
+    return crud.get_user_by_id(db, user_id)
 
 
 @router.delete("/{id}")

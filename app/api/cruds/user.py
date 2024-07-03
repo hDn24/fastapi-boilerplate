@@ -1,9 +1,10 @@
 from typing import List
 
+from sqlalchemy import update
 from sqlalchemy.orm import Session
 
 from app.api.models.user import User
-from app.api.schemas.user import UseCreate
+from app.api.schemas.user import UseCreate, UserUpdate
 from app.api.utils.security import get_password_hash
 
 
@@ -69,3 +70,24 @@ def get_user_by_email(db: Session, email: str) -> User | None:
         The user object if found, otherwise None.
     """
     return db.query(User).filter(User.email == email).first()
+
+
+def update_user(db: Session, user: User, user_update: UserUpdate, hashed_password: str):
+    """
+    Updates a user in the database.
+
+    Args:
+        db: The database session.
+        user: The user object to update.
+        user_update: The updated user data.
+        hashed_password: The hashed password of the user.
+    """
+    stmt = (
+        update(User)
+        .where(User.id == user.id)
+        .values(**user_update.dict(exclude={"password"}), hash_password=hashed_password)
+        .execution_options(synchronize_session="fetch")
+    )
+
+    db.execute(stmt)
+    db.commit()
