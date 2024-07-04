@@ -4,11 +4,11 @@ from sqlalchemy import update
 from sqlalchemy.orm import Session
 
 from app.api.models.user import User
-from app.api.schemas.user import UseCreate, UserUpdate
+from app.api.schemas.user import UserCreate, UserUpdate
 from app.api.utils.security import get_password_hash
 
 
-def create_user(db: Session, user_data: UseCreate) -> User:
+def create_user(db: Session, user_data: UserCreate) -> User:
     """
     Create a new user in the database.
 

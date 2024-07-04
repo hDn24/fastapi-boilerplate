@@ -11,7 +11,7 @@ class UserBase(BaseModel):
         from_attributes = True
 
 
-class UseCreate(UserBase):
+class UserCreate(UserBase):
     password: str = Field(example="...")
 
 

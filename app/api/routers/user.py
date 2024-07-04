@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.api.cruds import user as crud
 from app.api.models.user import User
-from app.api.schemas.user import UseCreate, UserOut, UserUpdate
+from app.api.schemas.user import UserCreate, UserOut, UserUpdate
 from app.api.utils.security import get_password_hash
 from app.database import get_db
 from app.dependencies import CurrentUser, get_current_active_superuser
@@ -37,7 +37,7 @@ def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)) -
 
 
 @router.post("/", dependencies=[Depends(get_current_active_superuser)], response_model=UserOut)
-def create_user(user_data: UseCreate, db: Session = Depends(get_db)) -> User:
+def create_user(user_data: UserCreate, db: Session = Depends(get_db)) -> User:
     """
     Create a new user.
 
