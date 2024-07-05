@@ -109,6 +109,16 @@ def update_user(user_id: int, user_data: UserUpdate, db: Session = Depends(get_d
     return crud.get_user_by_id(db, user_id)
 
 
-@router.delete("/{id}")
-def delete_user():
-    raise HTTPException(status_code=status.HTTP_501_NOT_IMPLEMENTED, detail="Not implemented yet")
+@router.delete("/{user_id}", response_model=dict)
+def delete_user(user_id: int, current_user: CurrentUser, db: Session = Depends(get_db)):
+    user = crud.get_user_by_id(db, user_id)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+
+    elif user != current_user and not user.is_superuser:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="The user doesn't have enough privileges")
+    elif user == current_user and user.is_superuser:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Superuser cannot delete themself")
+
+    crud.delete_user(db, user)
+    return {"message": "User deleted successfully"}

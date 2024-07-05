@@ -1,6 +1,6 @@
 from typing import List
 
-from sqlalchemy import update
+from sqlalchemy import delete, update
 from sqlalchemy.orm import Session
 
 from app.api.models.user import User
@@ -89,5 +89,18 @@ def update_user(db: Session, user: User, user_update: UserUpdate, hashed_passwor
         .execution_options(synchronize_session="fetch")
     )
 
+    db.execute(stmt)
+    db.commit()
+
+
+def delete_user(db: Session, user: User):
+    """
+    Deletes a user from the database.
+
+    Args:
+        db: The database session.
+        user: The user object to delete.
+    """
+    stmt = delete(User).where(User.id == user.id).execution_options(synchronize_session="fetch")
     db.execute(stmt)
     db.commit()
