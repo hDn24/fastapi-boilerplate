@@ -2,8 +2,8 @@ from pydantic import BaseModel, Field
 
 
 class UserBase(BaseModel):
-    username: str = Field(example="hDn24")
-    email: str = Field(example="hDn24@gmail")
+    username: str | None = Field(example="hDn24")
+    email: str = Field(example="hDn24@gmail.com")
     is_active: bool = Field(default=True)
     is_superuser: bool = Field(default=False)
 
@@ -11,7 +11,7 @@ class UserBase(BaseModel):
         from_attributes = True
 
 
-class UseCreate(UserBase):
+class UserCreate(UserBase):
     password: str = Field(example="...")
 
 
@@ -20,6 +20,11 @@ class User(UserBase):
 
     class Config:
         from_attributes = True
+
+
+class UserUpdate(UserBase):
+    email: str | None = Field(example="hDn24@gmail.com", default=None)
+    password: str = Field(example="...")
 
 
 class UserOut(UserBase):
