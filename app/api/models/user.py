@@ -8,7 +8,7 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String)
-    email = Column(String, index=True)
+    email = Column(String, index=True, unique=True)
     hash_password = Column(String)
     is_active = Column(Boolean)
     is_superuser = Column(Boolean)
