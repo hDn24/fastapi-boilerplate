@@ -87,29 +87,56 @@ def read_user_by_id(user_id: int, current_user: CurrentUser, db: Session = Depen
 
 
 @router.patch("/{user_id}", dependencies=[Depends(get_current_active_superuser)], response_model=UserOut)
-def update_user(user_id: int, user_data: UserUpdate, db: Session = Depends(get_db)):
+def update_user(user_id: int, user_update: UserUpdate, db: Session = Depends(get_db)):
+    """
+    Updates a user in the database with the given user ID and user update data.
+
+    Args:
+        user_id: The ID of the user to update.
+        user_update: The updated user data.
+        db: The database session. Defaults to the session obtained from the `get_db` dependency.
+
+    Returns:
+        UserOut: The updated user object.
+
+    Raises:
+        HTTPException: If the user is not found, if the email is already registered, or if there is an error updating the user.
+    """
     user = crud.get_user_by_id(db, user_id)
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
-    if user_data.email:
-        existing_user = crud.get_user_by_email(db, email=user_data.email)
-
+    if user_update.email:
+        existing_user = crud.get_user_by_email(db, email=user_update.email)
         if existing_user and existing_user.id != user_id:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
 
     try:
-        crud.update_user(db, user, user_data)
+        crud.update_user(db, user, user_update)
     except ValidationError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=e.errors())
     except Exception:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Update fail")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Update failed")
 
     return crud.get_user_by_id(db, user_id)
 
 
 @router.delete("/{user_id}", response_model=dict)
 def delete_user(user_id: int, current_user: CurrentUser, db: Session = Depends(get_db)):
+    """
+    Deletes a user by ID.
+
+    Args:
+        user_id: The ID of the user to delete.
+        current_user: The current user object.
+        db: The database session. Defaults to the session obtained from the `get_db` dependency.
+
+    Returns:
+        A message indicating the success of the deletion.
+
+    Raises:
+        HTTPException: If the user is not found or if there are permission issues.
+    """
     user = crud.get_user_by_id(db, user_id)
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
