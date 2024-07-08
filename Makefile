@@ -11,5 +11,8 @@ app:
 	docker compose up -d --build --force-recreate app
 	docker compose logs -f app
 
+build:
+	docker compose up -d
+
 lint:
 	poetry run python -m ruff format app
