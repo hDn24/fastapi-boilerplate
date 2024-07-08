@@ -72,7 +72,7 @@ def get_user_by_email(db: Session, email: str) -> User | None:
     return db.query(User).filter(User.email == email).first()
 
 
-def update_user(db: Session, user: User, user_update: UserUpdate):
+def update_user(db: Session, user: User, user_update: UserUpdate) -> None:
     """
     Updates a user in the database.
 
@@ -93,7 +93,7 @@ def update_user(db: Session, user: User, user_update: UserUpdate):
     db.commit()
 
 
-def delete_user(db: Session, user: User):
+def delete_user(db: Session, user: User) -> None:
     """
     Deletes a user from the database.
 
