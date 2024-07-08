@@ -144,7 +144,7 @@ def delete_user(user_id: int, current_user: CurrentUser, db: Session = Depends(g
     elif user != current_user and not user.is_superuser:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="The user doesn't have enough privileges")
     elif user == current_user and user.is_superuser:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Superuser cannot delete themself")
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Superuser cannot delete themselves")
 
     crud.delete_user(db, user)
     return {"message": "User deleted successfully"}
