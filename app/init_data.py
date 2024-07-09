@@ -18,7 +18,6 @@ def initialize_data() -> None:
     reset_database()
 
     superuser_data = UserCreate(
-        username=settings.SUPER_USER,
         email=settings.SUPER_USER,
         password=settings.SUPER_USER_PASSWORD,
         is_superuser=True,

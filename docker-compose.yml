@@ -14,7 +14,7 @@ services:
     platform: linux/amd64
 
   db:
-    image: postgres:15
+    image: postgres:13
     restart: always
     volumes:
       - app-db-data:/var/lib/postgresql/data/pgdata
