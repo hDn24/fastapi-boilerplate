@@ -1,8 +1,8 @@
 from typing import Annotated
 
-from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
-from jose import JWTError, jwt
+from fastapi import Depends, HTTPException, status  # type: ignore
+from fastapi.security import OAuth2PasswordBearer  # type: ignore
+from jose import JWTError, jwt  # type: ignore
 from pydantic import ValidationError
 from sqlalchemy.orm import Session
 

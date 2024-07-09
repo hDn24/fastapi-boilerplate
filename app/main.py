@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI  # type: ignore
 
 from app.api.routers.item import router as item_router
 from app.api.routers.login import router as login_router
@@ -13,6 +13,6 @@ app.include_router(user_router, prefix=settings.API_V1_STR)
 app.include_router(item_router, prefix=settings.API_V1_STR)
 
 if __name__ == "__main__":
-    import uvicorn
+    import uvicorn  # type: ignore
 
     uvicorn.run(app, host="0.0.0.0", port=8000)

@@ -3,7 +3,7 @@ import warnings
 
 from pydantic import Field, PostgresDsn, computed_field, model_validator
 from pydantic_core import MultiHostUrl
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings, SettingsConfigDict  # type: ignore
 from typing_extensions import Self
 
 
