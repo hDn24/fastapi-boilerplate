@@ -24,8 +24,8 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(default=60 * 24 * 8)
     SECRET_KEY: str = Field(default=secrets.token_urlsafe(32))
 
-    SUPER_USER: str = Field(examples="hDn24@gmail.com")
-    SUPER_USER_PASSWORD: str = Field(examples="hDn24")
+    SUPER_USER: str = Field(default="hDn24@gmail.com", examples=["hDn24@gmail.com"])
+    SUPER_USER_PASSWORD: str = Field(default="changethis", examples=["hDn24"])
 
     @computed_field  # type: ignore[misc]
     @property
