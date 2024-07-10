@@ -13,7 +13,6 @@ permissions:
   contents: read
 
 jobs:
-
   qa:
     runs-on: ubuntu-latest
     steps:
@@ -31,22 +30,9 @@ jobs:
       - name: Formatting
         run: poetry run black --check app
       - name: Linting
-        run: poetry run ruff check app --fix
+        run: poetry run ruff --output-format=github app
       - name: Static Type Checking
         run: poetry run mypy app
-
-  # lint:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: actions/setup-python@v2
-  #     - uses: chartboost/ruff-action@v1
-  #       with:
-  #         run: |
-  #           ruff check app --fix
-  #     - uses: stefanzweifel/git-auto-commit-action@v4
-  #       with:
-  #         commit_message: "style fixes by ruff"
 
   isort:
     runs-on: ubuntu-latest
