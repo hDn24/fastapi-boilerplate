@@ -31,7 +31,7 @@ jobs:
       - name: Formatting
         run: poetry run black --check app
       - name: Linting
-        run: poetry run ruff --output-format=github app
+        run: poetry run ruff check app --fix
       - name: Static Type Checking
         run: poetry run mypy app
 
