@@ -24,3 +24,20 @@ def get_items(db: Session, skip: int, limit: int, current_user: CurrentUser) -> 
         query = query.filter(Item.owner_id == current_user.id)
 
     return query.all()
+
+
+def get_item_by_id(db: Session, item_id: int) -> Item | None:
+    """
+    Retrieves an item from the database based on the provided item ID and current user.
+
+    Args:
+        db: The database session.
+        item_id: The ID of the item to retrieve.
+
+    Returns:
+        An Item object retrieved from the database.
+
+    Raises:
+        HTTPException: If the item is not found.
+    """
+    return db.query(Item).filter(Item.id == item_id).first()
