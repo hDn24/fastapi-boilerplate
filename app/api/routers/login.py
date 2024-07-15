@@ -51,8 +51,8 @@ def create_access_token(
     return Token(access_token=access_token)
 
 
-@router.post("/test-token", response_model=UserOut)
-def test_token(current_user: CurrentUser) -> Any:
+@router.get("/test-access-token", response_model=UserOut)
+def read_access_token(current_user: CurrentUser) -> Any:
     """
     This endpoint is used to test the validity of the access token by returning the current user object.
 

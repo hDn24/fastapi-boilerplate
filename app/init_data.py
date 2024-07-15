@@ -5,7 +5,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "../"))
 
 
 from app.api.cruds import user as crud
-from app.api.schemas.user import UseCreate
+from app.api.schemas.user import UserCreate
 from app.configs import settings
 from app.database import Base, SessionLocal, engine
 
@@ -17,8 +17,7 @@ def initialize_data() -> None:
     session = SessionLocal()
     reset_database()
 
-    superuser_data = UseCreate(
-        username=settings.SUPER_USER,
+    superuser_data = UserCreate(
         email=settings.SUPER_USER,
         password=settings.SUPER_USER_PASSWORD,
         is_superuser=True,

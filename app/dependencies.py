@@ -29,7 +29,6 @@ def get_current_user(
     Returns:
         User
     """
-    payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[security.ALGORITHM])
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[security.ALGORITHM])
         token_data = TokenPayload(**payload)
