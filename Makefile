@@ -15,4 +15,6 @@ build:
 	docker compose up -d
 
 lint:
-	poetry run python -m ruff format app
+	poetry run black --check app
+	poetry run ruff check app --fix
+	poetry run mypy app
