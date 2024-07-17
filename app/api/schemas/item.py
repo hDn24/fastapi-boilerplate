@@ -13,6 +13,10 @@ class ItemCreate(ItemBase):
     pass
 
 
+class ItemOut(ItemBase):
+    pass
+
+
 class Item(ItemBase):
     id: int = Field(examples=[1])
     owner_id: int = Field(examples=[1])

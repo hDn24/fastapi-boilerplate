@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status  # type: ignore
 from sqlalchemy.orm import Session
 
 from app.api.cruds import item as crud
-from app.api.schemas.item import Item
+from app.api.schemas.item import Item, ItemCreate, ItemOut
 from app.database import get_db
 from app.dependencies import CurrentUser
 
@@ -57,3 +57,19 @@ def read_item_by_id(item_id: int, current_user: CurrentUser, db: Session = Depen
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not enough permissions")
 
     return item
+
+
+@router.post("/", response_model=ItemOut)
+def create_item(item: ItemCreate, current_user: CurrentUser, db: Session = Depends(get_db)):
+    """
+    Creates an item in the database.
+
+    Args:
+        item: The item data to create.
+        db: The database session obtained from the `get_db` dependency.
+        current_user: The current user object obtained from the dependency.
+
+    Returns:
+        An Item object created in the database.
+    """
+    return crud.create_item(db=db, item=item, current_user=current_user)

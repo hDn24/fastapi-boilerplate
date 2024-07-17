@@ -3,6 +3,7 @@ from typing import List
 from sqlalchemy.orm import Session
 
 from app.api.models.user import Item
+from app.api.schemas.item import ItemCreate
 from app.dependencies import CurrentUser
 
 
@@ -41,3 +42,22 @@ def get_item_by_id(db: Session, item_id: int) -> Item | None:
         HTTPException: If the item is not found.
     """
     return db.query(Item).filter(Item.id == item_id).first()
+
+
+def create_item(db: Session, item: ItemCreate, current_user: CurrentUser) -> Item:
+    """
+    Creates an item in the database.
+
+    Args:
+        db: The database session.
+        item: The item data to create.
+        current_user: The current user object.
+
+    Returns:
+        An Item object created in the database.
+    """
+    db_item = Item(**item.dict(), owner_id=current_user.id)
+    db.add(db_item)
+    db.commit()
+    db.refresh(db_item)
+    return db_item
