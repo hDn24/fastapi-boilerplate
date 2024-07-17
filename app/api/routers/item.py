@@ -4,14 +4,14 @@ from fastapi import APIRouter, Depends, HTTPException, status  # type: ignore
 from sqlalchemy.orm import Session
 
 from app.api.cruds import item as crud
-from app.api.schemas.item import Item, ItemCreate, ItemOut
+from app.api.schemas.item import ItemCreate, ItemOut
 from app.database import get_db
 from app.dependencies import CurrentUser
 
 router = APIRouter(prefix="/items", tags=["items"])
 
 
-@router.get("/", response_model=List[Item])
+@router.get("/", response_model=List[ItemOut])
 def read_items(current_user: CurrentUser, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     """
     Retrieves a list of items from the database based on the provided skip and limit parameters.
@@ -33,7 +33,7 @@ def read_items(current_user: CurrentUser, skip: int = 0, limit: int = 100, db: S
     return items
 
 
-@router.get("/{item_id}", response_model=Item | None)
+@router.get("/{item_id}", response_model=ItemOut | None)
 def read_item_by_id(item_id: int, current_user: CurrentUser, db: Session = Depends(get_db)):
     """
     Retrieves an item from the database based on the provided item ID and current user.
