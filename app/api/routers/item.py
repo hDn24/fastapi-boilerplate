@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status  # type: ignore
 from sqlalchemy.orm import Session
 
 from app.api.cruds import item as crud
-from app.api.schemas.item import ItemCreate, ItemOut
+from app.api.schemas.item import ItemCreate, ItemOut, ItemUpdate
 from app.database import get_db
 from app.dependencies import CurrentUser
 
@@ -73,3 +73,27 @@ def create_item(item: ItemCreate, current_user: CurrentUser, db: Session = Depen
         An Item object created in the database.
     """
     return crud.create_item(db=db, item=item, current_user=current_user)
+
+
+@router.put("/{item_id}", response_model=ItemOut)
+def update_item(item_id: int, item_update: ItemUpdate, current_user: CurrentUser, db: Session = Depends(get_db)):
+    """
+    Updates an item in the database.
+
+    Args:
+        item_id: The ID of the item to update.
+        item_update: The item data to update.
+        current_user: The current user object obtained from the dependency.
+        db: The database session obtained from the `get_db` dependency.
+
+    Returns:
+        An Item object updated in the database.
+    """
+    db_item = crud.get_item_by_id(db, item_id)
+    if not db_item:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Item not found")
+
+    if not current_user.is_superuser and db_item.owner_id != current_user.id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not enough permissions")
+
+    return crud.update_item(db=db, item_id=item_id, item_update=item_update)

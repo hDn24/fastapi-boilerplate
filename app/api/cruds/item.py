@@ -1,9 +1,10 @@
 from typing import List
 
+from sqlalchemy import update
 from sqlalchemy.orm import Session
 
 from app.api.models.user import Item
-from app.api.schemas.item import ItemCreate
+from app.api.schemas.item import ItemCreate, ItemUpdate
 from app.dependencies import CurrentUser
 
 
@@ -61,3 +62,28 @@ def create_item(db: Session, item: ItemCreate, current_user: CurrentUser) -> Ite
     db.commit()
     db.refresh(db_item)
     return db_item
+
+
+def update_item(db: Session, item_id: int, item_update: ItemUpdate) -> Item | None:
+    """
+    Updates an item in the database.
+
+    Args:
+        db: The database session.
+        item_id: The ID of the item to update.
+        item_update: The item data to update.
+
+    Returns:
+        An Item object updated in the database.
+    """
+    stmt = (
+        update(Item)
+        .where(Item.id == item_id)
+        .values(**item_update.dict())
+        .execution_options(synchronize_session="fetch")
+    )
+
+    db.execute(stmt)
+    db.commit()
+
+    return db.query(Item).filter(Item.id == item_id).first()
