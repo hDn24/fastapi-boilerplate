@@ -1,8 +1,8 @@
 from datetime import timedelta
 from typing import Annotated, Any
 
-from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordRequestForm
+from fastapi import APIRouter, Depends, HTTPException, status  # type: ignore
+from fastapi.security import OAuth2PasswordRequestForm  # type: ignore
 from sqlalchemy.orm import Session
 
 from app.api.cruds import login as crud

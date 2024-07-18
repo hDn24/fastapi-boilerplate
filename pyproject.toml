@@ -21,10 +21,19 @@ bcrypt = "4.0.1"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.1.11"
+black = "^23.10.1"
+mypy = "^1.6.1"
 
 [tool.ruff]
 line-length = 120
+select = ["E", "F", "I"]
+ignore = ["E402", "E501"]
+fixable = ["ALL"]
+exclude = [".git", ".mypy_cache", ".ruff_cache"]
 extend-exclude = ["*.ipynb"]
+
+[tool.black]
+line-length = 120
 
 
 [build-system]

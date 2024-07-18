@@ -19,7 +19,7 @@ def authenticate(db: Session, email: str, password: str) -> User | None:
     """
     user = get_user_by_email(db, email)
 
-    if user and verify_password(password, user.hash_password):
+    if user and verify_password(password, str(user.hash_password)):
         return user
 
     return None
