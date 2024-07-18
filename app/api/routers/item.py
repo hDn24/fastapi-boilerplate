@@ -97,3 +97,30 @@ def update_item(item_id: int, item_update: ItemUpdate, current_user: CurrentUser
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not enough permissions")
 
     return crud.update_item(db=db, item_id=item_id, item_update=item_update)
+
+
+@router.delete("/{item_id}", response_model=dict)
+def delete_item_by_id(item_id: int, current_user: CurrentUser, db: Session = Depends(get_db)):
+    """
+    Deletes an item by ID.
+
+    Args:
+        item_id: The ID of the item to delete.
+        current_user: The current user object obtained from the dependency.
+        db: The database session obtained from the `get_db` dependency.
+
+    Returns:
+        A message indicating the success of the deletion.
+
+    Raises:
+        HTTPException: If the item is not found or if there are permission issues.
+    """
+    db_item = crud.get_item_by_id(db, item_id)
+    if not db_item:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Item not found")
+
+    if not current_user.is_superuser and db_item.owner_id != current_user.id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not enough permissions")
+
+    crud.delete_item_by_id(db, item_id)
+    return {"message": "Item deleted successfully"}

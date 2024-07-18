@@ -1,6 +1,6 @@
 from typing import List
 
-from sqlalchemy import update
+from sqlalchemy import delete, update
 from sqlalchemy.orm import Session
 
 from app.api.models.user import Item
@@ -87,3 +87,16 @@ def update_item(db: Session, item_id: int, item_update: ItemUpdate) -> Item | No
     db.commit()
 
     return db.query(Item).filter(Item.id == item_id).first()
+
+
+def delete_item_by_id(db: Session, item_id: int) -> None:
+    """
+    Deletes an item by ID.
+
+    Args:
+        db: The database session.
+        item_id: The ID of the item to delete.
+    """
+    stmt = delete(Item).where(Item.id == item_id).execution_options(synchronize_session="fetch")
+    db.execute(stmt)
+    db.commit()
