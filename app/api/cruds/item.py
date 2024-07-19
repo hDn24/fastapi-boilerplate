@@ -28,13 +28,13 @@ def get_items(db: Session, skip: int, limit: int, current_user: CurrentUser) -> 
     return query.all()
 
 
-def get_item_by_id(db: Session, item_id: int) -> Item | None:
+def get_item_by_id(db: Session, id: int) -> Item | None:
     """
     Retrieves an item from the database based on the provided item ID and current user.
 
     Args:
         db: The database session.
-        item_id: The ID of the item to retrieve.
+        id: The ID of the item to retrieve.
 
     Returns:
         An Item object retrieved from the database.
@@ -42,7 +42,7 @@ def get_item_by_id(db: Session, item_id: int) -> Item | None:
     Raises:
         HTTPException: If the item is not found.
     """
-    return db.query(Item).filter(Item.id == item_id).first()
+    return db.query(Item).filter(Item.id == id).first()
 
 
 def create_item(db: Session, item: ItemCreate, current_user: CurrentUser) -> Item:
@@ -64,39 +64,34 @@ def create_item(db: Session, item: ItemCreate, current_user: CurrentUser) -> Ite
     return db_item
 
 
-def update_item(db: Session, item_id: int, item_update: ItemUpdate) -> Item | None:
+def update_item(db: Session, id: int, item_update: ItemUpdate) -> Item | None:
     """
     Updates an item in the database.
 
     Args:
         db: The database session.
-        item_id: The ID of the item to update.
+        id: The ID of the item to update.
         item_update: The item data to update.
 
     Returns:
         An Item object updated in the database.
     """
-    stmt = (
-        update(Item)
-        .where(Item.id == item_id)
-        .values(**item_update.dict())
-        .execution_options(synchronize_session="fetch")
-    )
+    stmt = update(Item).where(Item.id == id).values(**item_update.dict()).execution_options(synchronize_session="fetch")
 
     db.execute(stmt)
     db.commit()
 
-    return db.query(Item).filter(Item.id == item_id).first()
+    return db.query(Item).filter(Item.id == id).first()
 
 
-def delete_item_by_id(db: Session, item_id: int) -> None:
+def delete_item_by_id(db: Session, id: int) -> None:
     """
     Deletes an item by ID.
 
     Args:
         db: The database session.
-        item_id: The ID of the item to delete.
+        id: The ID of the item to delete.
     """
-    stmt = delete(Item).where(Item.id == item_id).execution_options(synchronize_session="fetch")
+    stmt = delete(Item).where(Item.id == id).execution_options(synchronize_session="fetch")
     db.execute(stmt)
     db.commit()
