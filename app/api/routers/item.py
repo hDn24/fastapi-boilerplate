@@ -11,7 +11,7 @@ from app.dependencies import CurrentUser
 router = APIRouter(prefix="/items", tags=["items"])
 
 
-@router.get("/", response_model=List[ItemOut])
+@router.get("/", response_model=List[ItemOut], status_code=status.HTTP_200_OK)
 def read_items(current_user: CurrentUser, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     """
     Retrieves a list of items from the database based on the provided skip and limit parameters.
@@ -33,13 +33,13 @@ def read_items(current_user: CurrentUser, skip: int = 0, limit: int = 100, db: S
     return items
 
 
-@router.get("/{item_id}", response_model=ItemOut | None)
-def read_item_by_id(item_id: int, current_user: CurrentUser, db: Session = Depends(get_db)):
+@router.get("/{id}", response_model=ItemOut | None, status_code=status.HTTP_200_OK)
+def read_item_by_id(id: int, current_user: CurrentUser, db: Session = Depends(get_db)):
     """
     Retrieves an item from the database based on the provided item ID and current user.
 
     Args:
-        item_id: The ID of the item to retrieve.
+        id: The ID of the item to retrieve.
         current_user: The current user object obtained from the dependency.
         db: The database session obtained from the `get_db` dependency.
 
@@ -49,7 +49,7 @@ def read_item_by_id(item_id: int, current_user: CurrentUser, db: Session = Depen
     Raises:
         HTTPException: If the item is not found.
     """
-    item = crud.get_item_by_id(db, item_id)
+    item = crud.get_item_by_id(db=db, id=id)
     if not item:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Item not found")
 
@@ -59,7 +59,7 @@ def read_item_by_id(item_id: int, current_user: CurrentUser, db: Session = Depen
     return item
 
 
-@router.post("/", response_model=ItemOut)
+@router.post("/", response_model=ItemOut, status_code=status.HTTP_201_CREATED)
 def create_item(item: ItemCreate, current_user: CurrentUser, db: Session = Depends(get_db)):
     """
     Creates an item in the database.
@@ -75,13 +75,13 @@ def create_item(item: ItemCreate, current_user: CurrentUser, db: Session = Depen
     return crud.create_item(db=db, item=item, current_user=current_user)
 
 
-@router.put("/{item_id}", response_model=ItemOut)
-def update_item(item_id: int, item_update: ItemUpdate, current_user: CurrentUser, db: Session = Depends(get_db)):
+@router.put("/{id}", response_model=ItemOut, status_code=status.HTTP_204_NO_CONTENT)
+def update_item(id: int, item_update: ItemUpdate, current_user: CurrentUser, db: Session = Depends(get_db)):
     """
     Updates an item in the database.
 
     Args:
-        item_id: The ID of the item to update.
+        id: The ID of the item to update.
         item_update: The item data to update.
         current_user: The current user object obtained from the dependency.
         db: The database session obtained from the `get_db` dependency.
@@ -89,23 +89,23 @@ def update_item(item_id: int, item_update: ItemUpdate, current_user: CurrentUser
     Returns:
         An Item object updated in the database.
     """
-    db_item = crud.get_item_by_id(db, item_id)
+    db_item = crud.get_item_by_id(db=db, id=id)
     if not db_item:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Item not found")
 
     if not current_user.is_superuser and db_item.owner_id != current_user.id:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not enough permissions")
 
-    return crud.update_item(db=db, item_id=item_id, item_update=item_update)
+    return crud.update_item(db=db, id=id, item_update=item_update)
 
 
-@router.delete("/{item_id}", response_model=dict)
-def delete_item_by_id(item_id: int, current_user: CurrentUser, db: Session = Depends(get_db)):
+@router.delete("/{id}", response_model=dict, status_code=status.HTTP_204_NO_CONTENT)
+def delete_item_by_id(id: int, current_user: CurrentUser, db: Session = Depends(get_db)):
     """
     Deletes an item by ID.
 
     Args:
-        item_id: The ID of the item to delete.
+        id: The ID of the item to delete.
         current_user: The current user object obtained from the dependency.
         db: The database session obtained from the `get_db` dependency.
 
@@ -115,12 +115,12 @@ def delete_item_by_id(item_id: int, current_user: CurrentUser, db: Session = Dep
     Raises:
         HTTPException: If the item is not found or if there are permission issues.
     """
-    db_item = crud.get_item_by_id(db, item_id)
+    db_item = crud.get_item_by_id(db=db, id=id)
     if not db_item:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Item not found")
 
     if not current_user.is_superuser and db_item.owner_id != current_user.id:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not enough permissions")
 
-    crud.delete_item_by_id(db, item_id)
+    crud.delete_item_by_id(db=db, id=id)
     return {"message": "Item deleted successfully"}
