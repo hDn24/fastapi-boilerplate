@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.api.cruds import user as crud
 from app.api.models.user import User
-from app.api.schemas.user import UserCreate, UserOut, UserUpdate
+from app.api.schemas.user import UserCreate, UserOut, UserUpdate, UserUpdateMe
 from app.database import get_db
 from app.dependencies import CurrentUser, get_current_active_superuser
 
@@ -53,6 +53,35 @@ def create_user(user_data: UserCreate, db: Session = Depends(get_db)) -> User:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
 
     return crud.create_user(db, user_data)
+
+
+@router.patch("/me")
+def update_user_me(current_user: CurrentUser, user_update: UserUpdateMe, db: Session = Depends(get_db)):
+    """
+    Updates the current user's information in the database.
+
+    Args:
+        current_user: The current user object.
+        user_update: The updated user data.
+        db: The database session. Defaults to the session obtained from the `get_db` dependency.
+
+    Returns:
+        UserOut: The updated user object.
+
+    Raises:
+        HTTPException: If the user is not found or if there is an error updating the user.
+    """
+    if user_update.email:
+        existing_user = crud.get_user_by_email(db, email=user_update.email)
+        if existing_user and existing_user.id != current_user.id:
+            raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Email already registered")
+
+    try:
+        crud.update_me(db, current_user, user_update)
+    except ValidationError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=e.errors())
+    except Exception:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Update failed")
 
 
 @router.get("/{user_id}", response_model=UserOut | None)

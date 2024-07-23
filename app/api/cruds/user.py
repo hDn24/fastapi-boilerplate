@@ -4,7 +4,7 @@ from sqlalchemy import delete, update
 from sqlalchemy.orm import Session
 
 from app.api.models.user import User
-from app.api.schemas.user import UserCreate, UserUpdate
+from app.api.schemas.user import UserCreate, UserUpdate, UserUpdateMe
 from app.api.utils.security import get_password_hash
 
 
@@ -85,7 +85,30 @@ def update_user(db: Session, user: User, user_update: UserUpdate) -> None:
     stmt = (
         update(User)
         .where(User.id == user.id)
-        .values(**user_update.dict(exclude={"password"}), hash_password=get_password_hash(user_update.password))
+        .values(
+            **user_update.dict(exclude={"password"}, exclude_none=True),
+            hash_password=get_password_hash(user_update.password),
+        )
+        .execution_options(synchronize_session="fetch")
+    )
+
+    db.execute(stmt)
+    db.commit()
+
+
+def update_me(db: Session, user: User, user_update: UserUpdateMe) -> None:
+    """
+    Updates a user me in the database.
+
+    Args:
+        db: The database session.
+        user: The user object to update.
+        user_update: The updated user data.
+    """
+    stmt = (
+        update(User)
+        .where(User.id == user.id)
+        .values(**user_update.dict(exclude_none=True))
         .execution_options(synchronize_session="fetch")
     )
 
