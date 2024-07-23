@@ -55,7 +55,7 @@ def create_user(user_data: UserCreate, db: Session = Depends(get_db)) -> User:
     return crud.create_user(db, user_data)
 
 
-@router.patch("/me")
+@router.patch("/me", response_model=UserOut)
 def update_user_me(current_user: CurrentUser, user_update: UserUpdateMe, db: Session = Depends(get_db)):
     """
     Updates the current user's information in the database.
@@ -77,11 +77,13 @@ def update_user_me(current_user: CurrentUser, user_update: UserUpdateMe, db: Ses
             raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Email already registered")
 
     try:
-        crud.update_me(db, current_user, user_update)
+        user_me = crud.update_me(db, current_user, user_update)
     except ValidationError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=e.errors())
     except Exception:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Update failed")
+
+    return user_me
 
 
 @router.get("/{user_id}", response_model=UserOut | None)

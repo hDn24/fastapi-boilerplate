@@ -96,7 +96,7 @@ def update_user(db: Session, user: User, user_update: UserUpdate) -> None:
     db.commit()
 
 
-def update_me(db: Session, user: User, user_update: UserUpdateMe) -> None:
+def update_me(db: Session, user: User, user_update: UserUpdateMe) -> User:
     """
     Updates a user me in the database.
 
@@ -114,6 +114,8 @@ def update_me(db: Session, user: User, user_update: UserUpdateMe) -> None:
 
     db.execute(stmt)
     db.commit()
+
+    return db.query(User).filter(User.id == user.id).first()
 
 
 def delete_user(db: Session, user: User) -> None:
