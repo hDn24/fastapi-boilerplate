@@ -96,7 +96,7 @@ def update_user(db: Session, user: User, user_update: UserUpdate) -> None:
     db.commit()
 
 
-def update_me(db: Session, user: User, user_update: UserUpdateMe) -> User:
+def update_me(db: Session, user: User, user_update: UserUpdateMe) -> User | None:
     """
     Updates a user me in the database.
 
