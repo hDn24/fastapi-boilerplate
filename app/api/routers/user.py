@@ -86,13 +86,13 @@ def update_user_me(current_user: CurrentUser, user_update: UserUpdateMe, db: Ses
     return user_me
 
 
-@router.get("/{user_id}", response_model=UserOut | None)
-def read_user_by_id(user_id: int, current_user: CurrentUser, db: Session = Depends(get_db)) -> User:
+@router.get("/{id}", response_model=UserOut | None)
+def read_user_by_id(id: int, current_user: CurrentUser, db: Session = Depends(get_db)) -> User:
     """
     Retrieves a user from the database by ID.
 
     Args:
-        user_id: The ID of the user to retrieve.
+        id: The ID of the user to retrieve.
         current_user: The current user object.
         db: The database session. Defaults to the session obtained from the `get_db` dependency.
 
@@ -103,7 +103,7 @@ def read_user_by_id(user_id: int, current_user: CurrentUser, db: Session = Depen
         HTTPException: If the user is not found or doesn't have enough privileges.
     """
     # Retrieve the user from the database
-    user = crud.get_user_by_id(db, user_id)
+    user = crud.get_user_by_id(db, id)
 
     # Check if the user was found
     if not user:
@@ -117,13 +117,13 @@ def read_user_by_id(user_id: int, current_user: CurrentUser, db: Session = Depen
     return user
 
 
-@router.patch("/{user_id}", dependencies=[Depends(get_current_active_superuser)], response_model=UserOut)
-def update_user(user_id: int, user_update: UserUpdate, db: Session = Depends(get_db)):
+@router.patch("/{id}", dependencies=[Depends(get_current_active_superuser)], response_model=UserOut)
+def update_user(id: int, user_update: UserUpdate, db: Session = Depends(get_db)):
     """
     Updates a user in the database with the given user ID and user update data.
 
     Args:
-        user_id: The ID of the user to update.
+        id: The ID of the user to update.
         user_update: The updated user data.
         db: The database session. Defaults to the session obtained from the `get_db` dependency.
 
@@ -133,13 +133,13 @@ def update_user(user_id: int, user_update: UserUpdate, db: Session = Depends(get
     Raises:
         HTTPException: If the user is not found, if the email is already registered, or if there is an error updating the user.
     """
-    user = crud.get_user_by_id(db, user_id)
+    user = crud.get_user_by_id(db, id)
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
     if user_update.email:
         existing_user = crud.get_user_by_email(db, email=user_update.email)
-        if existing_user and existing_user.id != user_id:
+        if existing_user and existing_user.id != id:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
 
     try:
@@ -149,16 +149,16 @@ def update_user(user_id: int, user_update: UserUpdate, db: Session = Depends(get
     except Exception:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Update failed")
 
-    return crud.get_user_by_id(db, user_id)
+    return crud.get_user_by_id(db, id)
 
 
-@router.delete("/{user_id}", response_model=dict)
-def delete_user(user_id: int, current_user: CurrentUser, db: Session = Depends(get_db)):
+@router.delete("/{id}", response_model=dict)
+def delete_user(id: int, current_user: CurrentUser, db: Session = Depends(get_db)):
     """
     Deletes a user by ID.
 
     Args:
-        user_id: The ID of the user to delete.
+        id: The ID of the user to delete.
         current_user: The current user object.
         db: The database session. Defaults to the session obtained from the `get_db` dependency.
 
@@ -168,7 +168,7 @@ def delete_user(user_id: int, current_user: CurrentUser, db: Session = Depends(g
     Raises:
         HTTPException: If the user is not found or if there are permission issues.
     """
-    user = crud.get_user_by_id(db, user_id)
+    user = crud.get_user_by_id(db, id)
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
