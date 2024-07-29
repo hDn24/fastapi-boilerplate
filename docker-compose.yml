@@ -17,11 +17,11 @@ services:
     image: postgres:13
     restart: always
     volumes:
-      - app-db-data:/var/lib/postgresql/data/pgdata
+      - db:/var/lib/postgresql/data/
     env_file:
       - .env
     environment:
-      - PGDATA=/var/lib/postgresql/data/pgdata
+      - PGDATA=/var/lib/postgresql/data/
       - POSTGRES_PASSWORD=${DB_PASS?Variable not set}
       - POSTGRES_USER=${DB_USER?Variable not set}
       - POSTGRES_DB=${DB_NAME?Variable not set}
@@ -29,4 +29,4 @@ services:
       - 5432:5432
 
 volumes:
-  app-db-data:
+  db:

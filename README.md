@@ -38,9 +38,14 @@ $ cp .env.example .env
 # update values
 ```
 
-*- Execute below command to run the app:*
+*- Execute below command to build `db` and init data:*
 ```shell
-$ make app
+$ make db
+```
+
+*- Execute below command to run the app at local:*
+```shell
+$ make api
 ```
 
 ### API docs

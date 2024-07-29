@@ -23,8 +23,13 @@ class User(UserBase):
 
 
 class UserUpdate(UserBase):
-    email: str | None = Field(examples=["hDn24@gmail.com"], default=None)
-    password: str = Field(examples=["..."])
+    email: str | None = Field(default=None)
+    password: str = Field()
+
+
+class UserUpdateMe(BaseModel):
+    email: str | None = Field(default=None)
+    username: str | None = Field(default=None)
 
 
 class UserOut(UserBase):
