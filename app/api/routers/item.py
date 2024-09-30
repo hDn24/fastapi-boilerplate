@@ -75,7 +75,7 @@ def create_item(item: ItemCreate, current_user: CurrentUser, db: Session = Depen
     return crud.create_item(db=db, item=item, current_user=current_user)
 
 
-@router.put("/{id}", response_model=ItemOut, status_code=status.HTTP_204_NO_CONTENT)
+@router.put("/{id}", response_model=ItemOut)
 def update_item(id: int, item_update: ItemUpdate, current_user: CurrentUser, db: Session = Depends(get_db)):
     """
     Updates an item in the database.
@@ -99,7 +99,7 @@ def update_item(id: int, item_update: ItemUpdate, current_user: CurrentUser, db:
     return crud.update_item(db=db, id=id, item_update=item_update)
 
 
-@router.delete("/{id}", response_model=dict, status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{id}", response_model=dict)
 def delete_item_by_id(id: int, current_user: CurrentUser, db: Session = Depends(get_db)):
     """
     Deletes an item by ID.
