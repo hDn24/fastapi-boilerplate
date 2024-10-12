@@ -21,7 +21,7 @@ bcrypt = "4.0.1"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.1.11"
-black = "^23.10.1"
+black = "^24.10.0"
 mypy = "^1.6.1"
 
 [tool.ruff]
