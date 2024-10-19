@@ -11,8 +11,10 @@ env/
 venv/
 ENV/
 
-
-
 .python-version
 
+# IDE
 .vscode/
+
+# data
+data/
