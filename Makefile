@@ -1,5 +1,11 @@
 # Local development
-.PHONY: api db backend lint
+.PHONY: lint
+lint:
+	poetry run black --check app
+	poetry run ruff check app --fix
+	poetry run mypy app
+
+.PHONY: backend
 api:
 	poetry run python app/init_data.py
 	poetry run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
@@ -21,7 +27,4 @@ up-local:
 local-force:
 	docker compose -f docker-compose.yml build --no-cache
 
-lint:
-	poetry run black --check app
-	poetry run ruff check app --fix
-	poetry run mypy app
+
