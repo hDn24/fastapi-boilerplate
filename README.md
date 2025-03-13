@@ -23,7 +23,7 @@
 - Package management tools: `Poetry`
 - Local runtime: `Docker-compose`
 
-### Enviroment
+### Environment
 
 #### Setup python version with pyenv
 
@@ -40,7 +40,7 @@ $ poetry run pip install --upgrade pip
 $ poetry install
 ```
 
-*`.venv` directory is created in this project directory and installed Python and packages.*
+*`.venv` directory is created in this project directory, and Python and packages are installed.*
 
 #### Enter venv environment
 
@@ -52,7 +52,7 @@ or
 
 
 ### Install (for local development)
-*- Execute below command to run the app at local:*
+*- Execute the below command to run the app at locally:*
 ```shell
 $ make local
 $ make start-local
@@ -62,3 +62,4 @@ $ make start-local
 *Now, you can view API docs via* http://localhost:8000/docs/
 
 ## Deployment
+- TBU
