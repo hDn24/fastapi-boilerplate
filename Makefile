@@ -13,7 +13,13 @@ backend:
 	docker compose logs -f backend
 
 local:
-	docker compose up
+	docker compose -f docker-compose.yml build
+
+up-local:
+	docker compose -f docker-compose.yml up
+
+local-force:
+	docker compose -f docker-compose.yml build --no-cache
 
 lint:
 	poetry run black --check app
