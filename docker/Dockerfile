@@ -17,7 +17,6 @@ RUN poetry install --no-root && rm -rf $POETRY_CACHE_DIR
 ENV VIRTUAL_ENV=/code/.venv \
     PATH=/code/.venv/bin:$PATH
 
-COPY app app
+COPY ./app /code/app
 
-CMD ["python", "-m", "app.main"]
-
+ENTRYPOINT poetry run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000

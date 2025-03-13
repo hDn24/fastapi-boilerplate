@@ -3,11 +3,12 @@ services:
   backend:
     build:
       context: .
+      dockerfile: docker/Dockerfile
     image: fastapi-boilerplate-backend:${VERSION}
     container_name: fastapi-boilerplate-backend
     platform: linux/amd64
     volumes:
-      - ./app/:/code/app/
+      - ./app:/code/app
     environment:
       - DB_HOST=${DB_HOST?Variable not set}
       - DB_PORT=${DB_PORT?Variable not set}
@@ -20,11 +21,10 @@ services:
     restart: always
     volumes:
       - ./data/db:/var/lib/postgresql/data/
-    env_file:
-      - .env
     environment:
-      - POSTGRES_PASSWORD=${DB_PASS?Variable not set}
       - POSTGRES_USER=${DB_USER?Variable not set}
+      - POSTGRES_PASSWORD=${DB_PASS?Variable not set}
       - POSTGRES_DB=${DB_NAME?Variable not set}
+      - POSTGRES_INITDB_ARGS="--auth=md5"
     ports:
-      - 5432:5432
+      - 5432:${DB_PORT?Variable not set}
