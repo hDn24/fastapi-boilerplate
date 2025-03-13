@@ -23,29 +23,39 @@
 - Package management tools: `Poetry`
 - Local runtime: `Docker-compose`
 
+### Enviroment
+
+#### Setup python version with pyenv
+
+    pyenv install 3.10.4
+    pyenv local 3.10.4
+
+#### Setup venv with poetry
+
 *Install required Python packages:*
 ```shell
 $ pip install poetry
+$ poetry config virtualenvs.in-project true
+$ poetry run pip install --upgrade pip
 $ poetry install
 ```
 
+*`.venv` directory is created in this project directory and installed Python and packages.*
+
+#### Enter venv environment
+
+    source .venv/bin/activate
+
+or
+
+    poetry shell
+
 
 ### Install (for local development)
-
-*- Make your own `.env` file from the example:*
-```shell
-$ cp .env.example .env
-# update values
-```
-
-*- Execute below command to build `db` and init data:*
-```shell
-$ make db
-```
-
 *- Execute below command to run the app at local:*
 ```shell
-$ make api
+$ make local
+$ make start-local
 ```
 
 ### API docs
