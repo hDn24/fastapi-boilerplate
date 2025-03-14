@@ -4,9 +4,10 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile
+    platform: linux/amd64
     image: fastapi-boilerplate-backend:${VERSION}
     container_name: fastapi-boilerplate-backend
-    platform: linux/amd64
+    restart: on-failure
     volumes:
       - ./app:/code/app
     environment:
