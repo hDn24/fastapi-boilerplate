@@ -5,14 +5,24 @@ lint:
 	poetry run ruff check app --fix
 	poetry run mypy app
 
-.PHONY: backend
+.PHONY: app
 api:
 	poetry run python app/init_data.py
 	poetry run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 db:
+	mkdir -p data
+	docker compose up --build --force-recreate db
+	poetry run python app/tests/integration/create_dummy_db.py
+
+ddb:
+	mkdir -p data
 	docker compose up -d --build --force-recreate db
-	poetry run python app/init_data.py
+	poetry run python app/tests/integration/create_dummy_db.py
+
+rmdb:
+	docker stop fastapi-boilerplate-db
+	docker rm fastapi-boilerplate-db
 
 backend:
 	docker compose up -d --build --force-recreate backend

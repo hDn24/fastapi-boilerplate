@@ -1,9 +1,7 @@
 import os
 import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), "../"))
-
-
+sys.path.append(os.path.join(os.path.dirname(__file__), "../../../"))
 from app.api.cruds import user as crud
 from app.api.schemas.user import UserCreate
 from app.configs import settings
