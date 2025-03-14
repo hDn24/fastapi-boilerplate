@@ -8,14 +8,14 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.10"
 fastapi = "^0.109.1"
-python-multipart = "^0.0.7"
+python-multipart = "^0.0.18"
 uvicorn = {extras = ["standard"], version = "^0.18.3"}
 sqlalchemy = {extras = ["asyncio"], version = "^2.0.31"}
 psycopg = {extras = ["binary"], version = "3.1.19"}
 pydantic-settings = "2.2.1"
 pydantic = ">2.0"
 
-python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+python-jose = "3.4.0"
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 bcrypt = "4.0.1"
 
