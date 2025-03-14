@@ -24,9 +24,16 @@ rmdb:
 	docker stop fastapi-boilerplate-db
 	docker rm fastapi-boilerplate-db
 
-backend:
-	docker compose up -d --build --force-recreate backend
+be:
+	docker compose up --build --force-recreate backend
 	docker compose logs -f backend
+
+dbe:
+	docker compose up -d --build --force-recreate backend
+
+rmbe:
+	docker stop fastapi-boilerplate-backend
+	docker rm fastapi-boilerplate-backend
 
 local:
 	docker compose -f docker-compose.yml build
