@@ -7,7 +7,7 @@ lint:
 
 .PHONY: app
 api:
-	poetry run python app/init_data.py
+	poetry run python app/tests/integration/create_dummy_db.py
 	poetry run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 db:
