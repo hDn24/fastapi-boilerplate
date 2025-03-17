@@ -33,11 +33,11 @@
 #### Setup venv with poetry
 
 *Install required Python packages:*
-```shell
-$ pip install poetry
-$ poetry config virtualenvs.in-project true
-$ poetry run pip install --upgrade pip
-$ poetry install
+```console
+pip install poetry
+poetry config virtualenvs.in-project true
+poetry run pip install --upgrade pip
+poetry install
 ```
 
 *`.venv` directory is created in this project directory, and Python and packages are installed.*
@@ -52,10 +52,10 @@ or
 
 
 ### Install (for local development)
-*- Execute the below command to run the app at locally:*
-```shell
-$ make local
-$ make start-local
+*Execute the below command to run the app at locally:*
+```console
+make local
+make start-local
 ```
 
 ### API docs
