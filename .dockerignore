@@ -3,7 +3,14 @@
 .gitignore
 
 # Env, cache
+.env
 .venv
 venv
 *cache
 __pycache__
+.mypy_cache
+.ruff_cache
+
+# IDE
+.vscode
+.DS_Store
