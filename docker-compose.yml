@@ -29,3 +29,13 @@ services:
       - POSTGRES_INITDB_ARGS="--auth=md5"
     ports:
       - 5432:${DB_PORT?Variable not set}
+
+  nginx:
+    image: nginx:${VERSION}
+    container_name: fastapi-boilerplate-nginx
+    volumes:
+      - ./nginx/conf/app.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 80:80
+    depends_on:
+      - backend
