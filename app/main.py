@@ -6,7 +6,7 @@ from app.api.routers.login import router as login_router
 from app.api.routers.user import router as user_router
 from app.configs import settings
 
-app = FastAPI(title=settings.PROJECT_NAME, openapi_url=f"{settings.API_V1_STR}/openapi.json")
+app = FastAPI(title=settings.PROJECT_NAME)
 
 
 app.include_router(login_router, prefix=settings.API_V1_STR)
