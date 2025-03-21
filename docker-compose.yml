@@ -10,7 +10,7 @@ services:
       - POSTGRES_USER=${DB_USER?Variable not set}
       - POSTGRES_PASSWORD=${DB_PASS?Variable not set}
       - POSTGRES_DB=${DB_NAME?Variable not set}
-      # - POSTGRES_INITDB_ARGS="--auth=md5"
+      - POSTGRES_INITDB_ARGS="--auth=md5"
     ports:
       - 5432:${DB_PORT?Variable not set}
     healthcheck:
@@ -36,12 +36,10 @@ services:
     ports:
       - 8000:8000
     depends_on:
-      db:
-        condition: service_healthy
-        restart: true
+      - db
 
   nginx:
-    image: nginx:${VERSION}
+    image: nginx:latest
     container_name: fastapi-boilerplate-nginx
     volumes:
       - ./nginx/conf/app.conf:/etc/nginx/conf.d/default.conf
