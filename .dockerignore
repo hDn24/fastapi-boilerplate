@@ -10,6 +10,10 @@ venv
 __pycache__
 .mypy_cache
 .ruff_cache
+app.egg-info
+*.pyc
+.coverage
+htmlcov
 
 # IDE
 .vscode
