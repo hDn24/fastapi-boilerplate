@@ -29,7 +29,7 @@ services:
     container_name: fastapi-boilerplate-backend
     restart: on-failure
     volumes:
-      - ./app:/code/app
+      - ./app:/src/app
     environment:
       - DB_HOST=${DB_HOST?Variable not set}
       - DB_PORT=${DB_PORT?Variable not set}

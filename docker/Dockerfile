@@ -7,16 +7,16 @@ ENV POETRY_NO_INTERACTION=1 \
     POETRY_VIRTUALENVS_CREATE=1 \
     POETRY_CACHE_DIR=/tmp/poetry_cache
 
-WORKDIR /code
+WORKDIR /src
 
 # Copy poetry.lock* in case it doesn't exist in the repo
-COPY ./pyproject.toml ./poetry.lock* /code/
+COPY ./pyproject.toml ./poetry.lock* /src/
 
 RUN poetry install --no-root && rm -rf $POETRY_CACHE_DIR
 
-ENV VIRTUAL_ENV=/code/.venv \
-    PATH=/code/.venv/bin:$PATH
+ENV VIRTUAL_ENV=/src/.venv \
+    PATH=/src/.venv/bin:$PATH
 
-COPY ./app /code/app
+COPY ./app /src/app
 
 ENTRYPOINT poetry run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
